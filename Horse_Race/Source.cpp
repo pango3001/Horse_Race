@@ -9,21 +9,26 @@ int numOfRacers();
 void getRacers(Horse **racers, int size);
 
 int main() {
+	unsigned seed = time(0);
+	srand(seed);
 	opener();
 	int size = numOfRacers();
 	Horse ** horse = new Horse*[size];
 	getRacers(horse, size);
 	int races = 0;
+	int fastest = 0;
 	int goal;
+	string g, cont;
 	bool play_again = true;
 	while (play_again) {
-		races += 1;
+		
 		for (int i = 0; i < size; i++)
 			horse[i]->sendToGate();
 		bool end_loop = false;
 		while (!end_loop) {
 			cout << "Please enter the distance of the race: ";
-			cin >> goal;
+			getline(cin, g);
+			goal = stoi(g);
 			if (goal >= 100)
 				end_loop = true;
 			else
@@ -32,7 +37,7 @@ int main() {
 		cout << "Start!" << endl;
 		bool finish = false;
 		while(!finish){
-			int fastest;
+			
 			for (int i = 0; i < size; i++) {
 				horse[i]->displayHorse(goal);
 				horse[i]->runASecond();
@@ -40,23 +45,55 @@ int main() {
 			}
 			for (int i = 0; i < size; i++) {
 				if (horse[i]->getDistanceTraveled() >= goal) {
-					for (int j = 0; j < size - 1; j++) {
-						if (horse[j]->getDistanceTraveled() > horse[j + 1]->getDistanceTraveled())
+					for (int j = 0; j < size; j++) {
+						if (horse[j]->getDistanceTraveled() > horse[fastest]->getDistanceTraveled())
 							fastest = j;
-						else if (horse[j]->getDistanceTraveled() < horse[j + 1]->getDistanceTraveled())
-							fastest = j + 1;
-						else
-							fastest = j + (rand() % 2);
+						else if (horse[j]->getDistanceTraveled() == horse[fastest]->getDistanceTraveled()) {
+							int coinFlip = (rand() % 2);
+							if (coinFlip == 1)
+								fastest = j;
+						}
 					}
-					horse[fastest]->winRace();
 					finish = true;
 				}
 			}
-			system("cls");
+			//system("cls");
+			
+			bool end_loop = false;
+			while (!end_loop) {
+				cout << "Are you ready for the next second(y/n)?: ";
+				getline(cin, cont);
+				//tolower(cont);
+				if (cont == "y")
+					end_loop = true;
+				else if (cont == "n"){
+					end_loop = true;
+					finish = true;
+					}
+				else
+					cout << "You're only choices are y and n" << endl;
+			}
+			
+
 		}
+		if(cont == "y")
+			races += 1;
+			horse[fastest]->winRace();
 		for (int i = 0; i < size; i++) {
 			cout << horse[i]->displayHorseName() << " has won " <<
 			horse[i]->getWins() << "/" << races << " races." << endl;
+		}
+		end_loop = false;
+		while (!end_loop) {
+			cout << "Would you like to have another race (y/n)?: ";
+			getline(cin, cont);
+			//tolower(cont);
+			if (cont == "y")
+				end_loop = true;
+			else if (cont == "n") {
+				end_loop = true;
+				play_again = false;
+			}
 		}
 	}
 
@@ -96,17 +133,17 @@ void getRacers(Horse **racers, int size) {
 
 void opener() {
 	cout << "  Welcome to the Horse races!" << endl;
-	cout << "                            _(\_/)" << endl;
+	cout << "                            _(\\_/)" << endl;
 	cout << "                          ,((((^`\\" << endl;
 	cout << "                         ((((  (o \\" << endl;
 	cout << "                       ,((((( ,    \\" << endl;
 	cout << "   ,,,_              ,((((( /._  ,`,\\" << endl;
-	cout << "  ((((\\\ ,...       ,((((   |    `-.-'" << endl;
+	cout << "  (((( \\ ,...       ,((((   |    `-.-'" << endl;
 	cout << "  )))  ;'    `\"'\"'""((((     (" << endl;
 	cout << " (((  /             (((      \\" << endl;
 	cout << " ))  |                        |" << endl;
 	cout << " ((  |        .       '       |" << endl;
-	cout << " ))  \     _ '      `t     ,.')" << endl;
+	cout << " ))  (     _ '      `t     ,.')" << endl;
 	cout << " (   |   y;- -,-\"\"'\"-.\\   \\/" << endl;
 	cout << "  )  / ./  )  )        `\\  \\" << endl;
 	cout << "    /  /   ( (           / /'" << endl;

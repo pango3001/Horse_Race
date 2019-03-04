@@ -50,8 +50,10 @@ void Horse::displayHorse(int goalLength) {
 	for (int i = 0; i < goalScaled; i++) {
 		if (distanceTScaled == i)
 			cout << ">";
-		else if (distanceTScaled < i || distanceTScaled > i)
+		else if (distanceTScaled < i)
 			cout << " ";
+		else if (distanceTScaled > i)
+			cout << "-";
 	}
 	cout << "|";
 }
