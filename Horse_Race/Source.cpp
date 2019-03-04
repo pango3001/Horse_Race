@@ -32,6 +32,7 @@ int main() {
 		cout << "Start!" << endl;
 		bool finish = false;
 		while(!finish){
+			int fastest;
 			for (int i = 0; i < size; i++) {
 				horse[i]->displayHorse(goal);
 				horse[i]->runASecond();
@@ -39,7 +40,15 @@ int main() {
 			}
 			for (int i = 0; i < size; i++) {
 				if (horse[i]->getDistanceTraveled() >= goal) {
-					horse[i]->winRace();
+					for (int j = 0; j < size - 1; j++) {
+						if (horse[j]->getDistanceTraveled() > horse[j + 1]->getDistanceTraveled())
+							fastest = j;
+						else if (horse[j]->getDistanceTraveled() < horse[j + 1]->getDistanceTraveled())
+							fastest = j + 1;
+						else
+							fastest = j + (rand() % 2);
+					}
+					horse[fastest]->winRace();
 					finish = true;
 				}
 			}
